@@ -2,6 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+// NEW: Allow CORS from your Vercel frontend
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'https://your-app.vercel.app' // Replace with your actual Vercel URL later
+];
+
 // Connect to MongoDB (CHANGE THIS if using Atlas!)
 const MONGO = process.env.MONGODB_URI;
 // If using Atlas, replace above line with your connection string like:
@@ -23,7 +29,16 @@ const Job = mongoose.model('Job', new mongoose.Schema({
 
 // Create Express app
 const app = express();
-app.use(cors()); // Allow frontend to call this API
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
+
 app.use(express.json()); // Parse JSON from requests
 
 // API Route 1: GET all jobs (with optional filters)
@@ -56,4 +71,6 @@ app.post('/api/jobs', async (req, res) => {
 app.get('/health', (req, res) => res.json({ ok: true }));
 
 // Start server on port 4000
-app.listen(4000, () => console.log('✅ Server running on http://localhost:4000'));
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log('✅ Server running on port', PORT));
+
