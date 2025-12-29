@@ -9,7 +9,8 @@ import multer from 'multer';
 const ALLOWED_ORIGINS = [
   'http://localhost:3000',
   'http://localhost:5173',
-  'https://your-app.vercel.app' // Replace with your actual Vercel URL later
+  'https://job-platform-rose.vercel.app', // Replace with your actual Vercel URL
+  'https://your-job-platform-git-main.vercel.app' // Preview deployments
 ];
 
 import dotenv from 'dotenv';
