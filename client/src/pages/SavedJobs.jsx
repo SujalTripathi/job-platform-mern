@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../AuthContext';
 import axios from 'axios';
 
+// API URL - dynamic for production
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+
 const SavedJobs = () => {
   const { user } = useAuth();
   const [jobs, setJobs] = useState([]);
@@ -16,7 +19,7 @@ const SavedJobs = () => {
       if (user) {
         // Server-side bookmarks for logged-in users
         const token = localStorage.getItem('authToken');
-        const response = await axios.get('http://localhost:4000/api/bookmarks', {
+        const response = await axios.get(`${API_BASE}/bookmarks`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setJobs(response.data.map(b => b.jobId));
@@ -24,7 +27,7 @@ const SavedJobs = () => {
         // Client-side bookmarks for guests
         const savedIds = JSON.parse(localStorage.getItem('savedJobs') || '[]');
         if (savedIds.length > 0) {
-          const response = await axios.get(`http://localhost:4000/api/jobs?q=${savedIds.join(',')}`);
+          const response = await axios.get(`${API_BASE}/jobs?q=${savedIds.join(',')}`);
           setJobs(response.data.jobs.filter(job => savedIds.includes(job._id)));
         } else {
           setJobs([]);

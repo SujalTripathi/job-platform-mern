@@ -3,6 +3,9 @@ import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// API URL - dynamic for production
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+
 const JobPosting = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -49,7 +52,7 @@ const JobPosting = () => {
         postedBy: user._id
       };
 
-      await axios.post('http://localhost:4000/api/jobs', jobData, {
+      await axios.post(`${API_BASE}/jobs`, jobData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

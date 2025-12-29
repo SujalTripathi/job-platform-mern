@@ -6,6 +6,9 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.extend(relativeTime)
 
+// API URL - dynamic for production
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+
 const SearchResults = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
@@ -24,7 +27,7 @@ const SearchResults = () => {
     const fetch = async () => {
       setLoading(true)
       try {
-        const res = await axios.get('http://localhost:4000/api/jobs', {
+        const res = await axios.get(`${API_BASE}/jobs`, {
           params: { q, location, type, page: currentPage, limit: 6, sort }
         })
         const data = res.data

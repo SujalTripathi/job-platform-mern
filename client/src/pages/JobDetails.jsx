@@ -7,6 +7,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
+// API URL - dynamic for production
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+
 const JobDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ const JobDetails = () => {
 
   const loadJobDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/jobs`);
+      const response = await axios.get(`${API_BASE}/jobs`);
       const foundJob = response.data.jobs.find(j => j._id === id);
       if (foundJob) {
         setJob(foundJob);
@@ -53,7 +56,7 @@ const JobDetails = () => {
     if (coverLetter === null) return;
     try {
       const token = localStorage.getItem('authToken');
-      await axios.post('http://localhost:4000/api/applications', {
+      await axios.post(`${API_BASE}/applications`, {
         jobId: job._id,
         coverLetter,
         resume: 'dummy-resume.pdf'

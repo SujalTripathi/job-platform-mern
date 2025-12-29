@@ -3,6 +3,9 @@ import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// API URL - dynamic for production
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+
 const Profile = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ const Profile = () => {
   const loadApplications = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('http://localhost:4000/api/applications', {
+      const response = await axios.get(`${API_BASE}/applications`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setApplications(response.data);

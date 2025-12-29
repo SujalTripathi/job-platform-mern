@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+// API URL - dynamic for production
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+
 // Create the AuthContext
 const AuthContext = createContext();
 
@@ -14,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('authToken');
     if (token) {
       // Verify token with backend
-      axios.get('http://localhost:4000/api/auth/me', {
+      axios.get(`${API_BASE}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       }).then(res => {
         setUser(res.data.user);
@@ -28,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 
   // Login function
   const login = async (credentials) => {
-    const res = await axios.post('http://localhost:4000/api/auth/login', credentials);
+    const res = await axios.post(`${API_BASE}/auth/login`, credentials);
     const { user, token } = res.data;
     localStorage.setItem('authToken', token);
     setUser(user);
@@ -37,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   // Register function
   const register = async (userData) => {
-    const res = await axios.post('http://localhost:4000/api/auth/register', userData);
+    const res = await axios.post(`${API_BASE}/auth/register`, userData);
     const { user, token } = res.data;
     localStorage.setItem('authToken', token);
     setUser(user);

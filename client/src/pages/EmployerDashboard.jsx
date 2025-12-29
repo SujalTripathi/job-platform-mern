@@ -3,6 +3,9 @@ import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// API URL - dynamic for production
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+
 const EmployerDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -29,13 +32,13 @@ const EmployerDashboard = () => {
   const loadDashboardData = async () => {
     try {
       // Load jobs posted by this employer
-      const jobsResponse = await axios.get('http://localhost:4000/api/jobs');
+      const jobsResponse = await axios.get(`${API_BASE}/jobs`);
       // For demo purposes, we'll show all jobs. In a real app, you'd filter by employer
       setJobs(jobsResponse.data.jobs.slice(0, 10)); // Limit for demo
 
       // Load applications (in a real app, you'd filter by employer's jobs)
       const token = localStorage.getItem('authToken');
-      const appsResponse = await axios.get('http://localhost:4000/api/applications', {
+      const appsResponse = await axios.get(`${API_BASE}/applications`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setApplications(appsResponse.data);

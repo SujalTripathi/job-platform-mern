@@ -7,6 +7,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
+// API URL - dynamic for production
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+
 const AdvancedSearch = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -62,7 +65,7 @@ const AdvancedSearch = () => {
       if (filters.salaryMax) params.set('salaryMax', filters.salaryMax);
       if (filters.experience) params.set('experience', filters.experience);
 
-      const response = await axios.get(`http://localhost:4000/api/jobs?${params}`);
+      const response = await axios.get(`${API_BASE}/jobs?${params}`);
       setJobs(response.data.jobs || []);
       setTotalPages(response.data.totalPages || 1);
       setCurrentPage(response.data.currentPage || 1);
