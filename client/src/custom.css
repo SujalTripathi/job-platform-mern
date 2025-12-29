@@ -34,3 +34,50 @@ body {
   text-align: center;
   margin-top: 3rem;
 }
+
+/* Responsive tweaks */
+.post-form {
+  display: grid;
+  gap: 1.25rem;
+}
+.post-form .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.search-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.job-card {
+  display: block;
+}
+
+@media (max-width: 992px) {
+  .search-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .post-form .two-col { grid-template-columns: 1fr; }
+  .search-grid { grid-template-columns: 1fr; }
+  .post-job, .search-section { padding: 1rem; }
+  .job-card { padding: 16px !important; }
+  .container-custom { padding: 1rem; }
+  .header-title { font-size: 28px; }
+  h1 { font-size: 36px !important; }
+  .navbar .form-control, .navbar .form-select { width: 100%; margin-bottom: 0.5rem; }
+  .navbar .d-flex { flex-direction: column; align-items: stretch; }
+  .btn { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .header-title { font-size: 22px; }
+  h1 { font-size: 28px !important; }
+  .job-card { padding: 12px !important; }
+}

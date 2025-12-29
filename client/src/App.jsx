@@ -139,10 +139,10 @@ function Home() {
             <h2 style={{ margin: 0, fontSize: 28, color: '#fbbf24' }}>Post a New Job</h2>
           </div>
           
-          <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 20 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <form onSubmit={handleSubmit} className="post-form">
+            <div className="two-col">
               <div>
-                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#d4d4d4' }}>
+                <label className="form-label">
                   Job Title *
                 </label>
                 <input
@@ -190,9 +190,9 @@ function Home() {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+            <div className="two-col">
               <div>
-                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#d4d4d4' }}>
+                <label className="form-label">
                   Location
                 </label>
                 <input
@@ -324,7 +324,7 @@ function Home() {
             <h2 style={{ margin: 0, fontSize: 28, color: '#fbbf24' }}>Browse Jobs</h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 12, marginBottom: 30 }}>
+          <div className="search-grid">
             <input
               placeholder="Search by title..."
               value={searchTitle}
@@ -409,6 +409,7 @@ function Home() {
             {jobs.map((job) => (
               <div
                 key={job._id}
+                className="job-card"
                 style={{
                   background: 'linear-gradient(135deg, #262626 0%, #1a1a1a 100%)',
                   padding: 24,
