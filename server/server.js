@@ -8,13 +8,31 @@ const ALLOWED_ORIGINS = [
   'https://your-app.vercel.app' // Replace with your actual Vercel URL later
 ];
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 // Connect to MongoDB (CHANGE THIS if using Atlas!)
 const MONGO = process.env.MONGODB_URI;
 // If using Atlas, replace above line with your connection string like:
 // const MONGO = 'mongodb+srv://youruser:yourpassword@cluster.mongodb.net/jobapp';
 
-await mongoose.connect(MONGO);
-console.log('MongoDB connected!');
+if (!MONGO) {
+  console.error('Error: MONGODB_URI not set. Please set MONGODB_URI in .env or environment variables.');
+  process.exit(1);
+}
+
+try {
+  await mongoose.connect(MONGO);
+  console.log('MongoDB connected!');
+} catch (err) {
+  console.error('MongoDB connection failed:', err.message);
+  console.error('Suggestions:');
+  console.error('- Verify the connection string in server/.env');
+  console.error('- Ensure your IP is whitelisted in MongoDB Atlas (Network Access)');
+  console.error('- Run: nslookup -type=SRV _mongodb._tcp.<your-cluster-hostname>');
+  process.exit(1);
+}
 
 // Job Model (schema/structure of a job in database)
 const Job = mongoose.model('Job', new mongoose.Schema({
@@ -31,27 +49,47 @@ const Job = mongoose.model('Job', new mongoose.Schema({
 const app = express();
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+    console.log('CORS origin:', origin);
+    // Allow when no origin (server-to-server / same-origin requests), or exact match in allow list
+    if (!origin || ALLOWED_ORIGINS.includes(origin) || origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) {
       callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+      return;
     }
+
+    // During development be forgiving and allow other local dev hosts
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('Allowing CORS origin in development:', origin);
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error('Not allowed by CORS'));
   }
 }));
 
 app.use(express.json()); // Parse JSON from requests
 
-// API Route 1: GET all jobs (with optional filters)
+// API Route 1: GET all jobs (with optional filters, pagination and sorting)
 app.get('/api/jobs', async (req, res) => {
-  const { q = '', location = '', type = '' } = req.query;
+  const { q = '', location = '', type = '', page = 1, limit = 10, sort = 'newest' } = req.query;
   
   const filter = {};
   if (q) filter.title = new RegExp(q, 'i'); // Search in title
   if (location) filter.location = new RegExp(location, 'i');
   if (type) filter.type = type;
-  
-  const jobs = await Job.find(filter).sort({ createdAt: -1 });
-  res.json(jobs);
+
+  const sortOption = (sort === 'oldest') ? { createdAt: 1 } : { createdAt: -1 };
+
+  const pageNum = Math.max(1, parseInt(page, 10) || 1);
+  const perPage = Math.max(1, Math.min(100, parseInt(limit, 10) || 10));
+
+  const total = await Job.countDocuments(filter);
+  const jobs = await Job.find(filter)
+    .sort(sortOption)
+    .skip((pageNum - 1) * perPage)
+    .limit(perPage);
+
+  res.json({ jobs, totalPages: Math.ceil(total / perPage), currentPage: pageNum, total });
 });
 
 // API Route 2: POST create a new job

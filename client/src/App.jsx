@@ -1,8 +1,35 @@
-import React, { useEffect, useState } from 'react'
-
-const API = 'http://localhost:4000/api'
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import Header from './components/Header'
+import SearchResults from './pages/SearchResults'
+import CityPage from './pages/CityPage'
+import TypePage from './pages/TypePage'
 
 function App() {
+  return (
+    <>
+      <Header />
+      <RoutesWrapper />
+    </>
+  )
+}
+
+function RoutesWrapper() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/search" element={<SearchResults />} />
+      <Route path="/by-city" element={<CityPage />} />
+      <Route path="/by-type" element={<TypePage />} />
+    </Routes>
+  )
+}
+
+// --- the original Home content is preserved here ---
+import { useEffect, useState } from 'react'
+const API = 'http://localhost:4000/api'
+
+function Home() {
   const [jobs, setJobs] = useState([])
   const [searchTitle, setSearchTitle] = useState('')
   const [searchLocation, setSearchLocation] = useState('')
@@ -16,24 +43,34 @@ function App() {
     description: ''
   })
 
-  const loadJobs = async () => {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [sort, setSort] = useState('newest')
+
+  const loadJobs = async (page = 1, _sort = sort) => {
     try {
       const params = new URLSearchParams({
         q: searchTitle,
         location: searchLocation,
-        type: searchType
+        type: searchType,
+        page,
+        limit: 6,
+        sort: _sort
       })
       const response = await fetch(`${API}/jobs?${params}`)
       const data = await response.json()
-      setJobs(data)
+      // data has { jobs, totalPages, currentPage }
+      setJobs(data.jobs || data)
+      setTotalPages(data.totalPages || 1)
+      setCurrentPage(data.currentPage || page)
     } catch (error) {
       console.log('Error loading jobs')
     }
   }
 
   useEffect(() => {
-    loadJobs()
-  }, [])
+    loadJobs(1, sort)
+  }, [sort])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -334,21 +371,31 @@ function App() {
               <option value="part-time">Part-time</option>
               <option value="internship">Internship</option>
             </select>
-            <button
-              onClick={loadJobs}
-              style={{
-                background: '#fbbf24',
-                color: '#000000',
-                padding: '10px 24px',
-                border: 'none',
-                borderRadius: 10,
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: 'pointer'
-              }}
-            >
-              Search
-            </button>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button
+                onClick={() => loadJobs(1, sort)}
+                style={{
+                  background: '#fbbf24',
+                  color: '#000000',
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                Search
+              </button>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                style={{ padding: '10px', borderRadius: 8, background: '#0f0f0f', color: '#fff', border: '1px solid #3a3a3a' }}
+              >
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+              </select>
+            </div>
           </div>
 
           {/* Jobs List */}
@@ -427,6 +474,49 @@ function App() {
                 )}
               </div>
             ))}
+
+            {/* Pagination */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 12 }}>
+              <button
+                className="btn btn-sm"
+                onClick={() => {
+                  if (currentPage > 1) {
+                    loadJobs(currentPage - 1)
+                  }
+                }}
+                disabled={currentPage <= 1}
+                style={{ background: '#2b2b2b', color: '#fff', border: '1px solid #3a3a3a' }}
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }).slice(0, 7).map((_, i) => {
+                const p = i + 1
+                return (
+                  <button
+                    key={p}
+                    className={`btn btn-sm ${p === currentPage ? 'btn-warning' : 'btn-outline-secondary'}`}
+                    onClick={() => loadJobs(p)}
+                    style={{ minWidth: 36 }}
+                  >
+                    {p}
+                  </button>
+                )
+              })}
+
+              <button
+                className="btn btn-sm"
+                onClick={() => {
+                  if (currentPage < totalPages) {
+                    loadJobs(currentPage + 1)
+                  }
+                }}
+                disabled={currentPage >= totalPages}
+                style={{ background: '#2b2b2b', color: '#fff', border: '1px solid #3a3a3a' }}
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>
