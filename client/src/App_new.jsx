@@ -1,58 +1,13 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import SearchResults from './pages/SearchResults'
-import CityPage from './pages/CityPage'
-import TypePage from './pages/TypePage'
-import Login from './Login'
-import Register from './Register'
-import SavedJobs from './pages/SavedJobs'
-import JobDetails from './pages/JobDetails'
-import Profile from './pages/Profile'
-import AdvancedSearch from './pages/AdvancedSearch'
-import EmployerDashboard from './pages/EmployerDashboard'
-import JobPosting from './pages/JobPosting'
-import { useAuth } from './AuthContext'
+import React, { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { AuthContext } from './context/AuthContext'
+import './App.css'
+
+const API = 'http://localhost:5000/api'
 
 function App() {
-  return (
-    <>
-      <Header />
-      <RoutesWrapper />
-      <Footer />
-    </>
-  )
-}
-
-function RoutesWrapper() {
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/search" element={<SearchResults />} />
-      <Route path="/advanced-search" element={<AdvancedSearch />} />
-      <Route path="/by-city" element={<CityPage />} />
-      <Route path="/by-type" element={<TypePage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/saved" element={<SavedJobs />} />
-      <Route path="/job/:id" element={<JobDetails />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-      <Route path="/job-posting" element={<JobPosting />} />
-    </Routes>
-  )
-}
-
-// --- the original Home content is preserved here ---
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
-
-const API = 'http://localhost:4000/api'
-
-function Home() {
-  const { user } = useAuth()
+  const { user } = useContext(AuthContext)
   const navigate = useNavigate()
 
   // Updated state variables for the new advanced home page
@@ -174,7 +129,7 @@ function Home() {
 
         <div style={{ maxWidth: 900, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <h1 style={{
-            fontSize: window.innerWidth < 768 ? 36 : window.innerWidth < 1024 ? 48 : 64,
+            fontSize: 64,
             margin: 0,
             fontWeight: 900,
             background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fbbf24 100%)',
@@ -187,11 +142,11 @@ function Home() {
           }}>
             Find Your Dream Job
             <br />
-            <span style={{ fontSize: window.innerWidth < 768 ? 28 : window.innerWidth < 1024 ? 36 : 48, fontWeight: 700 }}>Today</span>
+            <span style={{ fontSize: 48, fontWeight: 700 }}>Today</span>
           </h1>
 
           <p style={{
-            fontSize: window.innerWidth < 768 ? 16 : 22,
+            fontSize: 22,
             margin: '0 0 50px 0',
             color: '#d4d4d4',
             lineHeight: 1.6,
@@ -206,7 +161,7 @@ function Home() {
           {/* Enhanced Search Bar */}
           <form onSubmit={handleSearch} style={{
             background: 'linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%)',
-            padding: window.innerWidth < 768 ? 20 : 35,
+            padding: 35,
             borderRadius: 25,
             boxShadow: '0 25px 80px rgba(0,0,0,0.6)',
             border: '2px solid #2a2a2a',
@@ -216,19 +171,19 @@ function Home() {
           }}>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '2fr 1.5fr 1fr auto',
-              gap: window.innerWidth < 768 ? 15 : 20,
+              gridTemplateColumns: '2fr 1.5fr 1fr auto',
+              gap: 20,
               alignItems: 'center'
             }}>
               <div style={{ position: 'relative' }}>
-                <span style={{ position: 'absolute', left: 15, top: '50%', transform: 'translateY(-50%)', color: '#fbbf24', fontSize: window.innerWidth < 768 ? 16 : 18 }}>🔍</span>
+                <span style={{ position: 'absolute', left: 15, top: '50%', transform: 'translateY(-50%)', color: '#fbbf24', fontSize: 18 }}>🔍</span>
                 <input
                   placeholder="Job title, keywords, company..."
                   value={searchTitle}
                   onChange={(e) => setSearchTitle(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: window.innerWidth < 768 ? '15px 15px 15px 45px' : '18px 18px 18px 50px',
+                    padding: '18px 18px 18px 50px',
                     border: '2px solid #3a3a3a',
                     borderRadius: 15,
                     fontSize: 16,
@@ -243,14 +198,14 @@ function Home() {
               </div>
 
               <div style={{ position: 'relative' }}>
-                <span style={{ position: 'absolute', left: 15, top: '50%', transform: 'translateY(-50%)', color: '#fbbf24', fontSize: window.innerWidth < 768 ? 16 : 18 }}>📍</span>
+                <span style={{ position: 'absolute', left: 15, top: '50%', transform: 'translateY(-50%)', color: '#fbbf24', fontSize: 18 }}>📍</span>
                 <input
                   placeholder="Location, city, remote..."
                   value={searchLocation}
                   onChange={(e) => setSearchLocation(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: window.innerWidth < 768 ? '15px 15px 15px 45px' : '18px 18px 18px 50px',
+                    padding: '18px 18px 18px 50px',
                     border: '2px solid #3a3a3a',
                     borderRadius: 15,
                     fontSize: 16,
@@ -268,7 +223,7 @@ function Home() {
                 value={searchType}
                 onChange={(e) => setSearchType(e.target.value)}
                 style={{
-                  padding: window.innerWidth < 768 ? '15px 15px' : '18px 18px',
+                  padding: '18px 18px',
                   border: '2px solid #3a3a3a',
                   borderRadius: 15,
                   fontSize: 16,
@@ -294,10 +249,10 @@ function Home() {
                 style={{
                   background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                   color: '#000000',
-                  padding: window.innerWidth < 768 ? '15px 25px' : '18px 35px',
+                  padding: '18px 35px',
                   border: 'none',
                   borderRadius: 15,
-                  fontSize: window.innerWidth < 768 ? 16 : 18,
+                  fontSize: 18,
                   fontWeight: 800,
                   cursor: 'pointer',
                   transition: 'all 0.3s',
@@ -323,20 +278,20 @@ function Home() {
           <div style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: window.innerWidth < 768 ? 20 : 40,
+            gap: 40,
             marginTop: 50,
             flexWrap: 'wrap'
           }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: window.innerWidth < 768 ? 24 : 32, fontWeight: 900, color: '#fbbf24' }}>{stats.totalJobs}+</div>
+              <div style={{ fontSize: 32, fontWeight: 900, color: '#fbbf24' }}>{stats.totalJobs}+</div>
               <div style={{ color: '#a3a3a3', fontSize: 14 }}>Active Jobs</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: window.innerWidth < 768 ? 24 : 32, fontWeight: 900, color: '#007bff' }}>{stats.totalCompanies}+</div>
+              <div style={{ fontSize: 32, fontWeight: 900, color: '#007bff' }}>{stats.totalCompanies}+</div>
               <div style={{ color: '#a3a3a3', fontSize: 14 }}>Companies</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: window.innerWidth < 768 ? 24 : 32, fontWeight: 900, color: '#28a745' }}>{stats.totalUsers}+</div>
+              <div style={{ fontSize: 32, fontWeight: 900, color: '#28a745' }}>{stats.totalUsers}+</div>
               <div style={{ color: '#a3a3a3', fontSize: 14 }}>Job Seekers</div>
             </div>
           </div>
@@ -355,7 +310,7 @@ function Home() {
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 60 }}>
             <h2 style={{
-              fontSize: window.innerWidth < 768 ? 32 : 48,
+              fontSize: 48,
               margin: 0,
               fontWeight: 800,
               background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
@@ -366,31 +321,31 @@ function Home() {
             }}>
               Popular Categories
             </h2>
-            <p style={{ color: '#a3a3a3', fontSize: window.innerWidth < 768 ? 16 : 18, maxWidth: 600, margin: '0 auto' }}>
+            <p style={{ color: '#a3a3a3', fontSize: 18, maxWidth: 600, margin: '0 auto' }}>
               Explore trending job categories and find opportunities in your field of expertise
             </p>
           </div>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth < 768 ? 'repeat(2, 1fr)' : window.innerWidth < 1024 ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)',
-            gap: window.innerWidth < 768 ? 20 : 30
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 30
           }}>
             {[
-              { name: 'Technology', icon: '💻', color: '#007bff' },
-              { name: 'Design', icon: '🎨', color: '#e83e8c' },
-              { name: 'Marketing', icon: '📈', color: '#fd7e14' },
-              { name: 'Finance', icon: '💰', color: '#28a745' },
-              { name: 'Healthcare', icon: '🏥', color: '#20c997' },
-              { name: 'Education', icon: '📚', color: '#6f42c1' },
-              { name: 'Engineering', icon: '⚙️', color: '#dc3545' },
-              { name: 'Sales', icon: '📊', color: '#ffc107' }
+              { name: 'Technology', icon: '💻', count: '250+ jobs', color: '#007bff', gradient: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)' },
+              { name: 'Design', icon: '🎨', count: '180+ jobs', color: '#e83e8c', gradient: 'linear-gradient(135deg, #e83e8c 0%, #c82384 100%)' },
+              { name: 'Marketing', icon: '📈', count: '220+ jobs', color: '#fd7e14', gradient: 'linear-gradient(135deg, #fd7e14 0%, #e8680d 100%)' },
+              { name: 'Finance', icon: '💰', count: '190+ jobs', color: '#28a745', gradient: 'linear-gradient(135deg, #28a745 0%, #1e7e34 100%)' },
+              { name: 'Healthcare', icon: '🏥', count: '160+ jobs', color: '#20c997', gradient: 'linear-gradient(135deg, #20c997 0%, #17a2b8 100%)' },
+              { name: 'Education', icon: '📚', count: '140+ jobs', color: '#6f42c1', gradient: 'linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%)' },
+              { name: 'Engineering', icon: '⚙️', count: '200+ jobs', color: '#dc3545', gradient: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)' },
+              { name: 'Sales', icon: '📊', count: '170+ jobs', color: '#ffc107', gradient: 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)' }
             ].map((category, index) => (
               <div
                 key={index}
                 style={{
                   background: 'linear-gradient(135deg, #1a1a1a 0%, #262626 100%)',
-                  padding: window.innerWidth < 768 ? 25 : 35,
+                  padding: 35,
                   borderRadius: 20,
                   border: '2px solid #3a3a3a',
                   textAlign: 'center',
@@ -411,7 +366,7 @@ function Home() {
                 }}
               >
                 <div style={{
-                  fontSize: window.innerWidth < 768 ? 40 : 60,
+                  fontSize: 60,
                   marginBottom: 20,
                   filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
                 }}>
@@ -420,18 +375,18 @@ function Home() {
                 <h3 style={{
                   color: '#ffffff',
                   margin: '0 0 10px 0',
-                  fontSize: window.innerWidth < 768 ? 18 : 24,
+                  fontSize: 24,
                   fontWeight: 700
                 }}>
                   {category.name}
                 </h3>
                 <p style={{
-                  color: '#a3a3a3',
+                  color: category.color,
                   margin: 0,
-                  fontSize: 14,
-                  fontWeight: 500
+                  fontSize: 16,
+                  fontWeight: 600
                 }}>
-                  Find opportunities
+                  {category.count}
                 </p>
               </div>
             ))}

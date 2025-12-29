@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 // Create the AuthContext
 const AuthContext = createContext();
@@ -8,24 +9,39 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Simulate checking for existing auth token on mount
+  // Check for existing auth token on mount
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      // Here you would typically verify the token with your backend
-      // For simplicity, assume it's valid and set a mock user
-      setUser({ id: 1, name: 'User' });
+      // Verify token with backend
+      axios.get('http://localhost:4000/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(res => {
+        setUser(res.data.user);
+      }).catch(() => {
+        localStorage.removeItem('authToken');
+      }).finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   // Login function
   const login = async (credentials) => {
-    // Implement login logic, e.g., API call
-    // For demo, simulate success
-    const mockUser = { id: 1, name: 'User' };
-    localStorage.setItem('authToken', 'mock-token');
-    setUser(mockUser);
+    const res = await axios.post('http://localhost:4000/api/auth/login', credentials);
+    const { user, token } = res.data;
+    localStorage.setItem('authToken', token);
+    setUser(user);
+    return user;
+  };
+
+  // Register function
+  const register = async (userData) => {
+    const res = await axios.post('http://localhost:4000/api/auth/register', userData);
+    const { user, token } = res.data;
+    localStorage.setItem('authToken', token);
+    setUser(user);
+    return user;
   };
 
   // Logout function
@@ -37,6 +53,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     login,
+    register,
     logout,
     loading,
   };
