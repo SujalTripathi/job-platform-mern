@@ -56,7 +56,7 @@ const Footer = () => {
             © 2026 JobPlatform. All rights reserved.
           </p>
           <div className="text-muted text-sm">
-            Made with ❤️ by JobPlatform Team
+            Built by the JobPlatform Team
           </div>
         </div>
       </div>

@@ -366,9 +366,11 @@ main {
 }
 .bg-blob-1 {
   top: -10%; left: -10%; width: 500px; height: 500px; background: #6366f1;
+  animation: float 15s ease-in-out infinite;
 }
 .bg-blob-2 {
   bottom: -10%; right: -10%; width: 600px; height: 600px; background: #a855f7;
+  animation: float 12s ease-in-out infinite reverse;
 }
 
 /* Table */

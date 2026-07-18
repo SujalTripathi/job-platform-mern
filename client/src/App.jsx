@@ -22,6 +22,8 @@ function App() {
     <>
       <Toaster position="bottom-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
       <Header />
+      <div className="bg-blob bg-blob-1"></div>
+      <div className="bg-blob bg-blob-2"></div>
       <main>
         <RoutesWrapper />
       </main>

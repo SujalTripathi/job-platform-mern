@@ -28,7 +28,7 @@ const Header = () => {
       <div className="container flex justify-between items-center h-full">
         {/* Logo */}
         <Link to="/" className="text-2xl text-gradient flex items-center gap-2" style={{ fontWeight: 900 }}>
-          ⚡ JobPlatform
+          JobPlatform
         </Link>
 
         {/* Desktop Navigation */}
