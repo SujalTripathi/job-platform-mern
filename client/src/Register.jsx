@@ -27,9 +27,9 @@ const Register = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)' }}>
-      <div style={{ background: '#262626', padding: 40, borderRadius: 15, border: '2px solid #3a3a3a', width: '100%', maxWidth: 400 }}>
-        <h2 style={{ color: '#fbbf24', textAlign: 'center', marginBottom: 30, fontSize: 28, fontWeight: 600 }}>Register</h2>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+      <div className="glass-panel" style={{ padding: 40, width: '100%', maxWidth: 400 }}>
+        <h2 className="header-title" style={{ textAlign: 'center', marginBottom: 30, fontSize: 28, fontWeight: 600 }}>Register</h2>
         
         {error && (
           <div style={{ background: '#dc3545', color: '#fff', padding: 12, borderRadius: 8, marginBottom: 20 }}>
@@ -45,13 +45,11 @@ const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              className="form-control"
               style={{
                 width: '100%',
                 padding: 12,
                 borderRadius: 8,
-                border: '1px solid #4a4a4a',
-                background: '#1a1a1a',
-                color: '#fff',
                 fontSize: 16
               }}
             />
@@ -64,13 +62,11 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="form-control"
               style={{
                 width: '100%',
                 padding: 12,
                 borderRadius: 8,
-                border: '1px solid #4a4a4a',
-                background: '#1a1a1a',
-                color: '#fff',
                 fontSize: 16
               }}
             />
@@ -83,13 +79,11 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="form-control"
               style={{
                 width: '100%',
                 padding: 12,
                 borderRadius: 8,
-                border: '1px solid #4a4a4a',
-                background: '#1a1a1a',
-                color: '#fff',
                 fontSize: 16
               }}
             />
@@ -100,13 +94,11 @@ const Register = () => {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
+              className="form-select"
               style={{
                 width: '100%',
                 padding: 12,
                 borderRadius: 8,
-                border: '1px solid #4a4a4a',
-                background: '#1a1a1a',
-                color: '#fff',
                 fontSize: 16
               }}
             >
@@ -118,12 +110,10 @@ const Register = () => {
           <button
             type="submit"
             disabled={loading}
+            className="btn btn-primary"
             style={{
               width: '100%',
               padding: 14,
-              background: '#fbbf24',
-              color: '#000',
-              border: 'none',
               borderRadius: 8,
               fontSize: 16,
               fontWeight: 600,
