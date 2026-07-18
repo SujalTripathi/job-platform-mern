@@ -27,80 +27,56 @@ const Register = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-      <div className="glass-panel" style={{ padding: 40, width: '100%', maxWidth: 400 }}>
-        <h2 className="header-title" style={{ textAlign: 'center', marginBottom: 30, fontSize: 28, fontWeight: 600 }}>Register</h2>
+    <div className="container flex items-center justify-center h-full" style={{ minHeight: 'calc(100vh - 200px)', padding: '2rem' }}>
+      <div className="glass-card" style={{ width: '100%', maxWidth: '400px' }}>
+        <h2 className="text-3xl text-gradient text-center mb-6">Create Account</h2>
         
         {error && (
-          <div style={{ background: '#dc3545', color: '#fff', padding: 12, borderRadius: 8, marginBottom: 20 }}>
+          <div className="badge badge-warning w-full text-center p-4 mb-4" style={{ display: 'block', borderRadius: '0.5rem' }}>
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ color: '#d4d4d4', display: 'block', marginBottom: 8 }}>Name</label>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="form-group m-0">
+            <label className="form-label">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="form-control"
-              style={{
-                width: '100%',
-                padding: 12,
-                borderRadius: 8,
-                fontSize: 16
-              }}
+              className="form-input"
             />
           </div>
 
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ color: '#d4d4d4', display: 'block', marginBottom: 8 }}>Email</label>
+          <div className="form-group m-0">
+            <label className="form-label">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="form-control"
-              style={{
-                width: '100%',
-                padding: 12,
-                borderRadius: 8,
-                fontSize: 16
-              }}
+              className="form-input"
             />
           </div>
 
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ color: '#d4d4d4', display: 'block', marginBottom: 8 }}>Password</label>
+          <div className="form-group m-0">
+            <label className="form-label">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="form-control"
-              style={{
-                width: '100%',
-                padding: 12,
-                borderRadius: 8,
-                fontSize: 16
-              }}
+              className="form-input"
             />
           </div>
 
-          <div style={{ marginBottom: 30 }}>
-            <label style={{ color: '#d4d4d4', display: 'block', marginBottom: 8 }}>Role</label>
+          <div className="form-group m-0">
+            <label className="form-label">Role</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
               className="form-select"
-              style={{
-                width: '100%',
-                padding: 12,
-                borderRadius: 8,
-                fontSize: 16
-              }}
             >
               <option value="jobseeker">Job Seeker</option>
               <option value="employer">Employer</option>
@@ -110,23 +86,14 @@ const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary"
-            style={{
-              width: '100%',
-              padding: 14,
-              borderRadius: 8,
-              fontSize: 16,
-              fontWeight: 600,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.7 : 1
-            }}
+            className="btn btn-primary w-full mt-4"
           >
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: 20, color: '#a3a3a3' }}>
-          Already have an account? <Link to="/login" style={{ color: '#fbbf24', textDecoration: 'none' }}>Login</Link>
+        <p className="text-center mt-6 text-muted text-sm">
+          Already have an account? <Link to="/login" style={{ color: 'var(--accent-main)' }}>Login</Link>
         </p>
       </div>
     </div>

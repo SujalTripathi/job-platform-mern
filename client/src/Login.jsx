@@ -25,71 +25,50 @@ const Login = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-      <div className="glass-panel" style={{ padding: 40, width: '100%', maxWidth: 400 }}>
-        <h2 className="header-title" style={{ textAlign: 'center', marginBottom: 30, fontSize: 28, fontWeight: 600 }}>Login</h2>
+    <div className="container flex items-center justify-center h-full" style={{ minHeight: 'calc(100vh - 200px)', padding: '2rem' }}>
+      <div className="glass-card" style={{ width: '100%', maxWidth: '400px' }}>
+        <h2 className="text-3xl text-gradient text-center mb-6">Welcome Back</h2>
         
         {error && (
-          <div style={{ background: '#dc3545', color: '#fff', padding: 12, borderRadius: 8, marginBottom: 20 }}>
+          <div className="badge badge-warning w-full text-center p-4 mb-4" style={{ display: 'block', borderRadius: '0.5rem' }}>
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ color: '#d4d4d4', display: 'block', marginBottom: 8 }}>Email</label>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="form-group m-0">
+            <label className="form-label">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="form-control"
-              style={{
-                width: '100%',
-                padding: 12,
-                borderRadius: 8,
-                fontSize: 16
-              }}
+              className="form-input"
             />
           </div>
 
-          <div style={{ marginBottom: 30 }}>
-            <label style={{ color: '#d4d4d4', display: 'block', marginBottom: 8 }}>Password</label>
+          <div className="form-group m-0">
+            <label className="form-label">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="form-control"
-              style={{
-                width: '100%',
-                padding: 12,
-                borderRadius: 8,
-                fontSize: 16
-              }}
+              className="form-input"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary"
-            style={{
-              width: '100%',
-              padding: 14,
-              borderRadius: 8,
-              fontSize: 16,
-              fontWeight: 600,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.7 : 1
-            }}
+            className="btn btn-primary w-full mt-4"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: 20, color: '#a3a3a3' }}>
-          Don't have an account? <Link to="/register" style={{ color: '#fbbf24', textDecoration: 'none' }}>Register</Link>
+        <p className="text-center mt-6 text-muted text-sm">
+          Don't have an account? <Link to="/register" style={{ color: 'var(--accent-main)' }}>Register here</Link>
         </p>
       </div>
     </div>

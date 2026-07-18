@@ -22,7 +22,9 @@ function App() {
     <>
       <Toaster position="bottom-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
       <Header />
-      <RoutesWrapper />
+      <main>
+        <RoutesWrapper />
+      </main>
       <Footer />
     </>
   )

@@ -24,329 +24,105 @@ const Header = () => {
   }
 
   return (
-    <header style={{
-      background: 'linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%)',
-      borderBottom: '1px solid #333',
-      position: 'sticky',
-      top: 0,
-      zIndex: 1000,
-      boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
-    }}>
-      <div style={{
-        maxWidth: 1400,
-        margin: '0 auto',
-        padding: '0 20px'
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: 70
-        }}>
-          {/* Logo */}
-          <Link to="/" style={{
-            fontSize: 24,
-            fontWeight: 900,
-            background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            textDecoration: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10
-          }}>
-            ⚡ Job Platform
-          </Link>
+    <header className="glass-nav" style={{ padding: '1rem 0' }}>
+      <div className="container flex justify-between items-center h-full">
+        {/* Logo */}
+        <Link to="/" className="text-2xl text-gradient flex items-center gap-2" style={{ fontWeight: 900 }}>
+          ⚡ JobPlatform
+        </Link>
 
-          {/* Desktop Navigation */}
-          <nav style={{
-            display: window.innerWidth < 768 ? 'none' : 'flex',
-            alignItems: 'center',
-            gap: 30
-          }}>
-            <Link to="/" style={navLinkStyle}>Home</Link>
-            <Link to="/advanced-search" style={navLinkStyle}>Advanced Search</Link>
-            <Link to="/job-posting" style={navLinkStyle}>Job Posting</Link>
-            <Link to="/by-type" style={navLinkStyle}>By Type</Link>
-            {user && <Link to="/saved" style={navLinkStyle}>Saved Jobs</Link>}
-          </nav>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          <Link to="/" className="text-secondary hover:text-primary">Home</Link>
+          <Link to="/advanced-search" className="text-secondary hover:text-primary">Search</Link>
+          <Link to="/job-posting" className="text-secondary hover:text-primary">Post Job</Link>
+          {user && <Link to="/saved" className="text-secondary hover:text-primary">Saved Jobs</Link>}
+        </nav>
 
-          {/* Search Form */}
-          <form onSubmit={handleSearch} style={{
-            display: window.innerWidth < 768 ? 'none' : 'flex',
-            alignItems: 'center',
-            gap: 10,
-            marginRight: 20
-          }}>
+        {/* Desktop User Actions */}
+        <div className="hidden md:flex items-center gap-4">
+          <form onSubmit={handleSearch} className="flex gap-2 mr-4">
             <input
-              placeholder="City"
+              placeholder="City..."
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              style={searchInputStyle}
+              className="form-input"
+              style={{ width: '120px', padding: '0.5rem' }}
             />
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              style={searchSelectStyle}
-            >
-              <option value="">Any Type</option>
-              <option value="full-time">Full-time</option>
-              <option value="part-time">Part-time</option>
-              <option value="internship">Internship</option>
-            </select>
-            <button type="submit" style={searchButtonStyle}>
+            <button type="submit" className="btn btn-primary btn-sm">
               Search
             </button>
           </form>
 
-          {/* User Actions */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 15
-          }}>
-            {user ? (
-              <>
-                <Link to="/profile" style={navLinkStyle}>Profile</Link>
-                {user.role === 'employer' && (
-                  <Link to="/employer-dashboard" style={navLinkStyle}>Dashboard</Link>
-                )}
-                <Notifications />
-                <span style={{ color: '#a3a3a3', fontSize: 14 }}>
-                  Welcome, {user.name}
-                </span>
-                <button onClick={handleLogout} style={logoutButtonStyle}>
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" style={navLinkStyle}>Login</Link>
-                <Link to="/register" style={registerButtonStyle}>Register</Link>
-              </>
-            )}
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            style={{
-              display: window.innerWidth < 768 ? 'block' : 'none',
-              background: 'none',
-              border: 'none',
-              color: '#fbbf24',
-              fontSize: 24,
-              cursor: 'pointer'
-            }}
-          >
-            ☰
-          </button>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Notifications />
+              <Link to="/profile" className="text-secondary hover:text-primary">Profile</Link>
+              {user.role === 'employer' && (
+                <Link to="/employer-dashboard" className="text-secondary hover:text-primary">Dashboard</Link>
+              )}
+              <button onClick={handleLogout} className="btn btn-secondary btn-sm">
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <Link to="/login" className="btn btn-secondary btn-sm">Login</Link>
+              <Link to="/register" className="btn btn-primary btn-sm">Register</Link>
+            </div>
+          )}
         </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && window.innerWidth < 768 && (
-          <div style={{
-            background: '#1a1a1a',
-            borderTop: '1px solid #333',
-            padding: '20px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 15
-          }}>
-            <Link to="/" style={mobileNavLinkStyle} onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link to="/advanced-search" style={mobileNavLinkStyle} onClick={() => setIsMenuOpen(false)}>Advanced Search</Link>
-            <Link to="/job-posting" style={mobileNavLinkStyle} onClick={() => setIsMenuOpen(false)}>Job Posting</Link>
-            <Link to="/by-type" style={mobileNavLinkStyle} onClick={() => setIsMenuOpen(false)}>By Type</Link>
-            {user && <Link to="/saved" style={mobileNavLinkStyle} onClick={() => setIsMenuOpen(false)}>Saved Jobs</Link>}
-
-            <form onSubmit={handleSearch} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 10,
-              marginTop: 10
-            }}>
-              <input
-                placeholder="City"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                style={mobileSearchInputStyle}
-              />
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                style={mobileSearchSelectStyle}
-              >
-                <option value="">Any Type</option>
-                <option value="full-time">Full-time</option>
-                <option value="part-time">Part-time</option>
-                <option value="internship">Internship</option>
-              </select>
-              <button type="submit" style={mobileSearchButtonStyle}>
-                Search
-              </button>
-            </form>
-
-            {user ? (
-              <>
-                <Link to="/profile" style={mobileNavLinkStyle} onClick={() => setIsMenuOpen(false)}>Profile</Link>
-                {user.role === 'employer' && (
-                  <Link to="/employer-dashboard" style={mobileNavLinkStyle} onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
-                )}
-                <span style={{ color: '#a3a3a3', fontSize: 14, textAlign: 'center' }}>
-                  Welcome, {user.name}
-                </span>
-                <button onClick={handleLogout} style={mobileLogoutButtonStyle}>
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" style={mobileNavLinkStyle} onClick={() => setIsMenuOpen(false)}>Login</Link>
-                <Link to="/register" style={mobileRegisterButtonStyle} onClick={() => setIsMenuOpen(false)}>Register</Link>
-              </>
-            )}
-          </div>
-        )}
+        {/* Mobile Menu Toggle */}
+        <button
+          className="md:hidden text-2xl text-primary"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+        >
+          ☰
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden glass-panel mt-4 p-4 mx-4 flex-col gap-4" style={{ display: 'flex' }}>
+          <Link to="/" className="text-primary" onClick={() => setIsMenuOpen(false)}>Home</Link>
+          <Link to="/advanced-search" className="text-primary" onClick={() => setIsMenuOpen(false)}>Search</Link>
+          <Link to="/job-posting" className="text-primary" onClick={() => setIsMenuOpen(false)}>Post Job</Link>
+          {user && <Link to="/saved" className="text-primary" onClick={() => setIsMenuOpen(false)}>Saved Jobs</Link>}
+
+          <hr style={{ borderColor: 'var(--glass-border)', margin: '0.5rem 0' }} />
+
+          <form onSubmit={handleSearch} className="flex flex-col gap-2">
+            <input
+              placeholder="City..."
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className="form-input"
+            />
+            <button type="submit" className="btn btn-primary">Search</button>
+          </form>
+
+          <hr style={{ borderColor: 'var(--glass-border)', margin: '0.5rem 0' }} />
+
+          {user ? (
+            <div className="flex flex-col gap-2">
+              <Link to="/profile" className="text-primary" onClick={() => setIsMenuOpen(false)}>Profile</Link>
+              {user.role === 'employer' && (
+                <Link to="/employer-dashboard" className="text-primary" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
+              )}
+              <button onClick={handleLogout} className="btn btn-secondary">Logout</button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <Link to="/login" className="btn btn-secondary" onClick={() => setIsMenuOpen(false)}>Login</Link>
+              <Link to="/register" className="btn btn-primary" onClick={() => setIsMenuOpen(false)}>Register</Link>
+            </div>
+          )}
+        </div>
+      )}
     </header>
   )
-}
-
-// Styles
-const navLinkStyle = {
-  color: '#d4d4d4',
-  textDecoration: 'none',
-  fontSize: 14,
-  fontWeight: 500,
-  transition: 'color 0.3s',
-  padding: '8px 12px',
-  borderRadius: 6
-}
-
-const searchInputStyle = {
-  padding: '8px 12px',
-  border: '1px solid #3a3a3a',
-  borderRadius: 6,
-  background: '#0a0a0a',
-  color: '#ffffff',
-  fontSize: 14,
-  outline: 'none',
-  width: 120
-}
-
-const searchSelectStyle = {
-  padding: '8px 12px',
-  border: '1px solid #3a3a3a',
-  borderRadius: 6,
-  background: '#0a0a0a',
-  color: '#ffffff',
-  fontSize: 14,
-  outline: 'none',
-  width: 120
-}
-
-const searchButtonStyle = {
-  background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-  color: '#000000',
-  border: 'none',
-  padding: '8px 16px',
-  borderRadius: 6,
-  fontSize: 14,
-  fontWeight: 600,
-  cursor: 'pointer',
-  transition: 'transform 0.2s'
-}
-
-const logoutButtonStyle = {
-  background: 'transparent',
-  color: '#fbbf24',
-  border: '1px solid #fbbf24',
-  padding: '6px 12px',
-  borderRadius: 6,
-  fontSize: 14,
-  cursor: 'pointer',
-  transition: 'all 0.3s'
-}
-
-const registerButtonStyle = {
-  background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-  color: '#000000',
-  textDecoration: 'none',
-  padding: '8px 16px',
-  borderRadius: 6,
-  fontSize: 14,
-  fontWeight: 600,
-  transition: 'transform 0.2s'
-}
-
-const mobileNavLinkStyle = {
-  color: '#d4d4d4',
-  textDecoration: 'none',
-  fontSize: 16,
-  fontWeight: 500,
-  padding: '10px 0',
-  borderBottom: '1px solid #333',
-  display: 'block'
-}
-
-const mobileSearchInputStyle = {
-  padding: '12px',
-  border: '1px solid #3a3a3a',
-  borderRadius: 6,
-  background: '#0a0a0a',
-  color: '#ffffff',
-  fontSize: 16,
-  outline: 'none',
-  width: '100%'
-}
-
-const mobileSearchSelectStyle = {
-  padding: '12px',
-  border: '1px solid #3a3a3a',
-  borderRadius: 6,
-  background: '#0a0a0a',
-  color: '#ffffff',
-  fontSize: 16,
-  outline: 'none',
-  width: '100%'
-}
-
-const mobileSearchButtonStyle = {
-  background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-  color: '#000000',
-  border: 'none',
-  padding: '12px',
-  borderRadius: 6,
-  fontSize: 16,
-  fontWeight: 600,
-  cursor: 'pointer',
-  width: '100%'
-}
-
-const mobileLogoutButtonStyle = {
-  background: 'transparent',
-  color: '#fbbf24',
-  border: '1px solid #fbbf24',
-  padding: '10px',
-  borderRadius: 6,
-  fontSize: 16,
-  cursor: 'pointer',
-  width: '100%',
-  marginTop: 10
-}
-
-const mobileRegisterButtonStyle = {
-  background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-  color: '#000000',
-  textDecoration: 'none',
-  padding: '12px',
-  borderRadius: 6,
-  fontSize: 16,
-  fontWeight: 600,
-  display: 'block',
-  textAlign: 'center',
-  marginTop: 10
 }
 
 export default Header
